@@ -1,0 +1,47 @@
+[
+    {
+        "title": "Get Started",
+        "collapsable": false,
+        "children": [
+            "get-started/installation-setup",
+            "get-started/requirements"
+        ]
+    },
+    {
+        "title": "Feature Tour",
+        "collapsable": false,
+        "children": [
+            "feature-tour/playground",
+            "feature-tour/writing-formatting",
+            "feature-tour/links",
+            "feature-tour/mentions",
+            "feature-tour/uploads",
+            "feature-tour/posting",
+            "feature-tour/looks-layout"
+        ]
+    },
+    {
+        "title": "Developers",
+        "collapsable": false,
+        "children": [
+            "developers/craft-integration",
+            "developers/browser-authoring",
+            "developers/context-settings"
+        ]
+    },
+    {
+        "title": "Reference",
+        "collapsable": false,
+        "children": [
+            "reference/editor-options"
+        ]
+    },
+    {
+        "title": "User Guides",
+        "collapsable": false,
+        "children": [
+            "user-guides/build-a-notes-plugin-with-editor",
+            "user-guides/add-editor-to-a-site-module"
+        ]
+    }
+]

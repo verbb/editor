@@ -1,0 +1,9 @@
+[
+  {"type":"heading","attrs":{"level":2},"content":[{"type":"text","marks":[{"type":"underline"}],"text":"Title"}]},
+  {"type":"paragraph","content":[
+    {"type":"text","text":"Entry","marks":[{"type":"craftLink","attrs":{"id":7,"type":"entry","label":"Entry","href":"/entry"}}]},
+    {"type":"mention","attrs":{"id":4,"type":"user","label":"Alice"}}
+  ]},
+  {"type":"editorAsset","attrs":{"id":9,"src":"/image.png","alt":"Description","title":"Image"}},
+  {"type":"attachment","attrs":{"id":10,"url":"/file.pdf","filename":"Paper","mimeType":"application/pdf","size":1234}}
+]

@@ -1,0 +1,28 @@
+/* In the Control Panel every colour comes from Craft's own variables, so it follows the CP theme. */
+.verbb-editor[data-theme='craft'] {
+    --_accent: var(--verbb-editor-accent, var(--link-color));
+    --_accent-fg: var(--verbb-editor-accent-fg, var(--white));
+    --_bg: var(--verbb-editor-bg, var(--white));
+    --_fg: var(--verbb-editor-fg, var(--text-color));
+    --_muted: var(--verbb-editor-muted, var(--medium-text-color));
+    --_border: var(--verbb-editor-border, var(--gray-400));
+    --_hover: var(--verbb-editor-hover, var(--gray-050));
+    --_pop-bg: var(--verbb-editor-pop-bg, var(--white));
+    --_bubble: var(--verbb-editor-bubble, var(--gray-1000));
+    --_bubble-fg: var(--verbb-editor-bubble-fg, var(--white));
+    --_overlay: var(--verbb-editor-overlay, color-mix(in srgb, var(--gray-1000) 72%, transparent));
+    --_overlay-fg: var(--verbb-editor-overlay-fg, var(--white));
+    --_danger: var(--verbb-editor-danger, var(--error-color));
+    --_warning: var(--verbb-editor-warning, var(--warning-color));
+    --_radius: var(--verbb-editor-radius, var(--large-border-radius));
+    --_font-size: var(--verbb-editor-font-size, 0.875rem);
+    --_avatar-fg: var(--verbb-editor-avatar-fg, var(--white));
+    --_avatar-1: var(--verbb-editor-avatar-1, var(--violet-600));
+    --_avatar-2: var(--verbb-editor-avatar-2, var(--orange-700));
+    --_avatar-3: var(--verbb-editor-avatar-3, var(--green-700));
+    --_avatar-4: var(--verbb-editor-avatar-4, var(--blue-600));
+    --_avatar-5: var(--verbb-editor-avatar-5, var(--pink-600));
+    --_avatar-6: var(--verbb-editor-avatar-6, var(--cyan-700));
+    --_avatar-7: var(--verbb-editor-avatar-7, var(--amber-700));
+    --_avatar-8: var(--verbb-editor-avatar-8, var(--lime-700));
+}

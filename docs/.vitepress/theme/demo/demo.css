@@ -1,0 +1,399 @@
+/* Live Editor demos in the docs. The editor brings its own styles; this is only the stage around it. */
+
+.editor-demo {
+    margin: 1.5rem 0;
+}
+
+.editor-demo__stage {
+    padding: 20px;
+    border: 1px solid #e4e4e7;
+    border-radius: 12px;
+    background: #fafafa;
+    color: #18181b;
+}
+
+.editor-demo--dark .editor-demo__stage,
+.editor-demo__stage.editor-demo--dark {
+    border-color: #2a2e35;
+    background: #17191d;
+    color: #e8eaed;
+}
+
+/*
+ * Dark paints no surface of its own, so the host maps its dark colours onto the editor, as a
+ * site would. These match the design mockup's dark stage. They sit on the wrapper so the
+ * playground's accent picker, an inline style on the same element, still wins.
+ */
+.editor-demo--dark .editor-demo__mount {
+    --verbb-editor-accent: #2563eb;
+    --verbb-editor-accent-fg: #fff;
+    --verbb-editor-bg: #1f2227;
+    --verbb-editor-fg: #e8eaed;
+    --verbb-editor-muted: #9aa3ad;
+    --verbb-editor-border: #363c45;
+}
+
+.editor-demo--dark .editor-playground__note,
+.editor-demo--dark .editor-demo__posted {
+    color: #9aa3ad;
+}
+
+.editor-demo__mount {
+    margin-inline: auto;
+}
+
+.editor-demo__header {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+/* "Posting as": the host's own header content, beside Editor's reply chip. */
+.editor-demo__as {
+    display: inline-flex;
+    gap: 6px;
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+.editor-demo__as b {
+    font-weight: 600;
+}
+
+/* At the editor's narrow width the mockup drops "Posting as" to keep room for the reply chip. */
+@container verbb-editor (max-width: 520px) {
+    .editor-demo__as {
+        display: none;
+    }
+}
+
+.editor-demo__tabs {
+    display: inline-flex;
+    gap: 2px;
+    padding: 2px;
+    border-radius: 8px;
+    background: rgb(0 0 0 / 0.05);
+}
+
+.editor-demo__tabs button {
+    padding: 3px 10px;
+    border-radius: 6px;
+    font: inherit;
+    font-weight: 500;
+    color: inherit;
+}
+
+/* The chosen tab sets its own text colour, so it reads on its own surface in either theme. */
+.editor-demo__tabs button[aria-pressed='true'] {
+    background: #fff;
+    color: #18181b;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
+}
+
+.editor-demo--dark .editor-demo__tabs button[aria-pressed='true'] {
+    background: #363c45;
+    color: #e8eaed;
+}
+
+/* The internal-note surface: the host sets the editor's own tokens. */
+verbb-editor.is-note {
+    --verbb-editor-bg: #fff8db;
+    --verbb-editor-border: #f0d77a;
+}
+
+.editor-demo__tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #71717a;
+}
+
+.editor-demo__button {
+    padding: 5px 12px;
+    border: 1px solid #d4d4d8;
+    border-radius: 8px;
+    background: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    color: #27272a;
+}
+
+.editor-demo__button:hover {
+    background: #f4f4f5;
+}
+
+.editor-demo__posted {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-left: 3px solid #22c55e;
+    border-radius: 6px;
+    background: rgb(34 197 94 / 0.08);
+    font-size: 14px;
+}
+
+.editor-demo__label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    opacity: 0.7;
+}
+
+.editor-demo__html > * + * {
+    margin-top: 0.5em;
+}
+
+.editor-demo__html ul {
+    padding-left: 1.25em;
+    list-style: disc;
+}
+
+.editor-demo__html ol {
+    padding-left: 1.25em;
+    list-style: decimal;
+}
+
+.editor-demo__html a {
+    color: #2563eb;
+    text-decoration: underline;
+}
+
+.editor-demo__json {
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.editor-demo__json summary {
+    cursor: pointer;
+    color: #52525b;
+}
+
+.editor-demo__json pre {
+    max-height: 320px;
+    margin-top: 8px;
+    padding: 12px;
+    overflow: auto;
+    border-radius: 8px;
+    background: #f4f4f5;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.editor-demo figcaption {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #71717a;
+}
+
+/* Playground */
+
+.editor-playground {
+    display: grid;
+    gap: 20px;
+    margin: 1.5rem 0;
+}
+
+.editor-playground__note {
+    margin: 0 0 12px;
+    font-size: 13px;
+    opacity: 0.75;
+}
+
+.editor-playground__controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    align-items: start;
+    gap: 20px 24px;
+    font-size: 13px;
+}
+
+.editor-playground__controls fieldset {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.editor-playground__controls legend {
+    margin-bottom: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #71717a;
+}
+
+.editor-playground__segments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.editor-playground__segments label {
+    position: relative;
+}
+
+.editor-playground__segments input,
+.editor-playground__swatches input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.editor-playground__segments span {
+    display: inline-block;
+    padding: 4px 10px;
+    border: 1px solid #d4d4d8;
+    border-radius: 999px;
+    background: #fff;
+    cursor: pointer;
+}
+
+.editor-playground__segments input:checked + span {
+    border-color: #18181b;
+    background: #18181b;
+    color: #fff;
+}
+
+.editor-playground__segments input:focus-visible + span,
+.editor-playground__swatches label:has(input:focus-visible) {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+}
+
+.editor-playground__swatches {
+    display: flex;
+    gap: 6px;
+}
+
+.editor-playground__swatches label {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--swatch);
+    cursor: pointer;
+}
+
+.editor-playground__swatches label:has(input:checked) {
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--swatch);
+}
+
+.editor-playground__range {
+    display: grid;
+    gap: 4px;
+    color: #52525b;
+}
+
+.editor-playground__toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.editor-playground__try {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+    padding-left: 1.1em;
+    list-style: disc;
+    color: #3f3f46;
+}
+
+.editor-playground__try kbd {
+    padding: 0 4px;
+    border: 1px solid #d4d4d8;
+    border-radius: 4px;
+    background: #fff;
+    font-size: 11px;
+}
+
+.editor-demo__uploads {
+    margin: 6px 0 0;
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+/* A review form's own fields, in the editor's above and footer slots. */
+.editor-demo__rating {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.editor-demo__rating legend {
+    float: left;
+    margin-right: 8px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+
+.editor-demo__rating label {
+    position: relative;
+    cursor: pointer;
+    color: color-mix(in srgb, currentColor 25%, transparent);
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.editor-demo__rating input {
+    position: absolute;
+    opacity: 0;
+}
+
+.editor-demo__rating label:has(~ label input:checked),
+.editor-demo__rating label:has(input:checked),
+.editor-demo__rating:hover label:has(~ label:hover),
+.editor-demo__rating label:hover {
+    color: #f5a623;
+}
+
+.editor-demo__rating label:has(input:focus-visible) {
+    outline: 2px solid var(--vp-c-brand-1, #2563eb);
+    outline-offset: 2px;
+    border-radius: 3px;
+}
+
+.editor-demo__sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+.editor-demo__fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 10px 14px;
+}
+
+.editor-demo__fields label {
+    display: grid;
+    gap: 4px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+
+.editor-demo__fields input {
+    padding: 6px 9px;
+    border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-weight: 400;
+}

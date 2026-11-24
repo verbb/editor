@@ -1,0 +1,40 @@
+{
+    "name": "editor",
+    "version": "1.0.0-dev",
+    "private": true,
+    "workspaces": [
+        "packages/*",
+        "apps/*",
+        "docs"
+    ],
+    "scripts": {
+        "typecheck": "npm run typecheck --workspace @verbb/editor",
+        "dev": "npm run dev --workspace @verbb/editor",
+        "build": "npm run build --workspace @verbb/editor",
+        "build:bundle": "npm run build:bundle --workspace @verbb/editor",
+        "test": "npm run test:js && npm run test:php:unit",
+        "test:js": "npm run test --workspace @verbb/editor",
+        "test:php": "composer test",
+        "test:php:unit": "composer test:unit",
+        "test:contracts": "node tests/bin/browser-contract.mjs",
+        "test:package": "tsc --project tests/package/tsconfig.json",
+        "test:pack": "node tests/bin/package-contents.mjs",
+        "test:bundle": "node tests/bin/bundle-freshness.mjs",
+        "test:browser": "playwright test --config tests/browser/playwright.config.ts",
+        "release:version": "node scripts/release-version.mjs",
+        "playground": "npm run dev --workspace @verbb/editor-playground",
+        "dev:plugin-docs": "npm run docs:dev --prefix docs",
+        "build:plugin-docs": "npm run docs:build --prefix docs",
+        "check": "npm run typecheck && npm run test:js && npm run test:php:unit && npm run build && npm run test:contracts && npm run test:package && npm run test:pack && npm run test:bundle && npm run release:version"
+    },
+    "devDependencies": {
+        "@playwright/test": "^1.65.1",
+        "typescript": "^7.0.2"
+    },
+    "overrides": {
+        "vitepress": {
+            "vite": "^6.4.4"
+        },
+        "postcss-selector-parser": "^6.1.5"
+    }
+}

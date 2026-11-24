@@ -1,0 +1,41 @@
+/*
+ * Defaults every theme starts from. A host maps its own tokens once, on the element or an ancestor:
+ * `.comments verbb-editor { --verbb-editor-accent: var(--comments-accent); }`.
+ */
+verbb-editor,
+verbb-editor-input {
+    display: block;
+}
+
+.verbb-editor {
+    --_accent: var(--verbb-editor-accent, #2563eb);
+    --_accent-fg: var(--verbb-editor-accent-fg, #fff);
+    --_bg: var(--verbb-editor-bg, #fff);
+    --_fg: var(--verbb-editor-fg, #1f2328);
+    --_muted: var(--verbb-editor-muted, #626b78);
+    --_border: var(--verbb-editor-border, #8592a3);
+    --_hover: var(--verbb-editor-hover, rgb(15 23 42 / 0.06));
+    --_pop-bg: var(--verbb-editor-pop-bg, #fff);
+    --_bubble: var(--verbb-editor-bubble, #1f2328);
+    --_bubble-fg: var(--verbb-editor-bubble-fg, #fff);
+    --_overlay: var(--verbb-editor-overlay, rgb(15 18 24 / 0.72));
+    --_overlay-fg: var(--verbb-editor-overlay-fg, #fff);
+    --_avatar-fg: var(--verbb-editor-avatar-fg, #fff);
+    --_avatar-1: var(--verbb-editor-avatar-1, #7048e8);
+    --_avatar-2: var(--verbb-editor-avatar-2, #c2410c);
+    --_avatar-3: var(--verbb-editor-avatar-3, #15803d);
+    --_avatar-4: var(--verbb-editor-avatar-4, #1971c2);
+    --_avatar-5: var(--verbb-editor-avatar-5, #c2255c);
+    --_avatar-6: var(--verbb-editor-avatar-6, #0e7490);
+    --_avatar-7: var(--verbb-editor-avatar-7, #b45309);
+    --_avatar-8: var(--verbb-editor-avatar-8, #4d7c0f);
+    --_danger: var(--verbb-editor-danger, #c42b1c);
+    --_warning: var(--verbb-editor-warning, #a85d00);
+    --_radius: var(--verbb-editor-radius, 10px);
+    --_font-family: var(--verbb-editor-font-family, inherit);
+    --_font-size: var(--verbb-editor-font-size, 0.9375rem);
+    --_line-height: var(--verbb-editor-line-height, 1.55);
+    --_min-height: var(--verbb-editor-min-height, 3.75em);
+    --_max-height: var(--verbb-editor-max-height, 420px);
+    --_code-font: var(--verbb-editor-code-font, ui-monospace, SFMono-Regular, Menlo, monospace);
+}

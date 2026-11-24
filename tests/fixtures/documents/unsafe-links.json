@@ -1,0 +1,35 @@
+[
+    {
+        "type": "paragraph",
+        "content": [
+            {
+                "type": "text",
+                "marks": [
+                    {
+                        "type": "link",
+                        "attrs": {
+                            "href": "javascript:alert(1)"
+                        }
+                    }
+                ],
+                "text": "Unsafe"
+            },
+            {
+                "type": "text",
+                "text": " and "
+            },
+            {
+                "type": "text",
+                "marks": [
+                    {
+                        "type": "link",
+                        "attrs": {
+                            "href": "https://verbb.io"
+                        }
+                    }
+                ],
+                "text": "Safe"
+            }
+        ]
+    }
+]

@@ -1,0 +1,29 @@
+[
+    {
+        "type": "paragraph",
+        "content": [
+            {
+                "type": "text",
+                "text": "Visit "
+            },
+            {
+                "type": "text",
+                "marks": [
+                    {
+                        "type": "link",
+                        "attrs": {
+                            "href": "https://verbb.io",
+                            "target": "_blank",
+                            "rel": "noopener noreferrer nofollow"
+                        }
+                    }
+                ],
+                "text": "Verbb"
+            },
+            {
+                "type": "text",
+                "text": " for plugins."
+            }
+        ]
+    }
+]

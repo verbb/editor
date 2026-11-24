@@ -1,0 +1,18 @@
+/*
+ * Dark sits on the host's own surface rather than painting one, so it matches whatever dark the
+ * site uses. Floating menus use the browser's dark canvas unless the host sets `--verbb-editor-pop-bg`.
+ */
+.verbb-editor[data-theme='dark'] {
+    color-scheme: dark;
+    --_accent: var(--verbb-editor-accent, #7aa7ff);
+    --_accent-fg: var(--verbb-editor-accent-fg, #0b1020);
+    --_bg: var(--verbb-editor-bg, transparent);
+    --_fg: var(--verbb-editor-fg, currentColor);
+    --_muted: var(--verbb-editor-muted, color-mix(in srgb, currentColor 62%, transparent));
+    --_border: var(--verbb-editor-border, color-mix(in srgb, currentColor 45%, transparent));
+    --_hover: var(--verbb-editor-hover, rgb(255 255 255 / 0.08));
+    --_pop-bg: var(--verbb-editor-pop-bg, Canvas);
+    --_bubble: var(--verbb-editor-bubble, #0b0d10);
+    --_danger: var(--verbb-editor-danger, #ff8a7a);
+    --_warning: var(--verbb-editor-warning, #f5b454);
+}

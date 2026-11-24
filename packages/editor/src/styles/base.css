@@ -1,0 +1,422 @@
+/*
+ * Layout and interaction rules for every theme. Colours come from `--verbb-editor-*` tokens, which a
+ * host sets on the element or any ancestor from its own: accent, bg, fg, muted, border and radius
+ * cover most of it. Internally they're read through `--_*` copies holding the theme's defaults. The
+ * editor adapts to its own width through a container query, so a narrow sidebar behaves like a phone.
+ */
+.verbb-editor {
+    --_ring: color-mix(in srgb, var(--_accent) 22%, transparent);
+    --_soft: color-mix(in srgb, var(--_accent) 9%, var(--_pop-bg));
+    --_line: color-mix(in srgb, var(--_fg) 12%, transparent);
+    container: verbb-editor / inline-size;
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background: var(--_bg);
+    color: var(--_fg);
+    border: 1px solid var(--_border);
+    border-radius: var(--_radius);
+    font-family: var(--_font-family);
+    font-size: var(--_font-size);
+    line-height: var(--_line-height);
+    text-align: start;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.verbb-editor *,
+.verbb-editor *::before,
+.verbb-editor *::after {
+    box-sizing: border-box;
+}
+
+.verbb-editor [hidden] { display: none !important; }
+.verbb-editor:focus-within { border-color: color-mix(in srgb, var(--_accent) 70%, var(--_border)); box-shadow: 0 0 0 3px var(--_ring); }
+.verbb-editor.is-bare { background: transparent; border-color: transparent; border-radius: 0; }
+.verbb-editor.is-bare:focus-within { border-color: transparent; box-shadow: none; }
+.verbb-editor :focus-visible { outline: 2px solid var(--_accent); outline-offset: 1px; }
+.verbb-editor .ProseMirror:focus-visible,
+.verbb-editor__pop-field input:focus-visible,
+.verbb-editor__alt textarea:focus-visible { outline: none; }
+
+.verbb-editor__icon { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+
+.verbb-editor__sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Header: who you're replying to, then the host's slot (Reply / Internal note, Posting as) */
+.verbb-editor__head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-width: 0; padding: 9px 12px 0; font-size: 0.8125rem; color: var(--_muted); }
+.verbb-editor__reply { display: inline-flex; align-items: center; gap: 6px; min-width: 0; max-width: 100%; height: 26px; padding-block: 0; padding-inline: 9px 4px; border-radius: 13px; background: var(--_soft); color: var(--_fg); font-size: 0.78125rem; }
+.verbb-editor__reply > .verbb-editor__icon { width: 14px; height: 14px; }
+.verbb-editor__reply-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.verbb-editor__reply-text b { font-weight: 600; }
+.verbb-editor__reply .verbb-editor__tool { width: 20px; height: 20px; border-radius: 50%; }
+.verbb-editor__reply .verbb-editor__tool .verbb-editor__icon { width: 14px; height: 14px; }
+
+/* The writing area */
+.verbb-editor__body { min-width: 0; padding: 10px 14px 6px; cursor: text; }
+.verbb-editor__content { min-height: var(--_min-height); max-height: var(--_max-height); overflow-y: auto; overflow-wrap: anywhere; }
+.verbb-editor__content .ProseMirror { min-height: inherit; outline: none; }
+.verbb-editor__content .ProseMirror > * + * { margin-top: 0.55em; }
+.verbb-editor__content .ProseMirror p { margin: 0; }
+.verbb-editor__content .ProseMirror p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    /* Empty alternative text: the textbox's `aria-placeholder` says it instead, so it isn't read as content. */
+    content: attr(data-placeholder) / '';
+    float: inline-start;
+    height: 0;
+    pointer-events: none;
+    color: var(--_muted);
+}
+.verbb-editor__content .ProseMirror ::selection { background: color-mix(in srgb, var(--_accent) 26%, transparent); }
+.verbb-editor__content .ProseMirror a { color: var(--_accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+.verbb-editor__content .ProseMirror blockquote { margin: 0; padding-inline-start: 12px; border-inline-start: 3px solid color-mix(in srgb, var(--_fg) 20%, transparent); color: color-mix(in srgb, var(--_fg) 78%, transparent); }
+.verbb-editor__content .ProseMirror code { padding: 1px 5px; border-radius: 4px; background: var(--_hover); font-family: var(--_code-font); font-size: 0.88em; }
+.verbb-editor-mention { color: var(--_accent); background: var(--_soft); border-radius: 4px; padding: 0 3px; font-weight: 550; white-space: nowrap; }
+
+/*
+ * Host resets commonly remove these, which makes toolbar buttons look as if they do nothing. Scoped
+ * to the writing area, so a site's own styles for its pages are untouched.
+ */
+.verbb-editor__content .ProseMirror ul { list-style: disc; margin: 0; padding-inline-start: 1.35em; }
+.verbb-editor__content .ProseMirror ol { list-style: decimal; margin: 0; padding-inline-start: 1.35em; }
+.verbb-editor__content .ProseMirror li { display: list-item; }
+.verbb-editor__content .ProseMirror li > p { margin: 0; }
+.verbb-editor__content .ProseMirror li + li { margin-top: 0.15em; }
+.verbb-editor__content .ProseMirror h1 { font-size: 1.6em; font-weight: 700; line-height: 1.2; }
+.verbb-editor__content .ProseMirror h2 { font-size: 1.3em; font-weight: 700; line-height: 1.25; }
+.verbb-editor__content .ProseMirror h3 { font-size: 1.1em; font-weight: 700; line-height: 1.3; }
+.verbb-editor__content .ProseMirror h4,
+.verbb-editor__content .ProseMirror h5,
+.verbb-editor__content .ProseMirror h6 { font-size: 1em; font-weight: 700; }
+
+/* Collapsed: one line until it's focused */
+.verbb-editor.is-collapsed .verbb-editor__body { padding-block: 9px; }
+.verbb-editor.is-collapsed .verbb-editor__content { min-height: 0; }
+.verbb-editor.is-collapsed .verbb-editor__head,
+.verbb-editor.is-collapsed .verbb-editor__tray,
+.verbb-editor.is-collapsed .verbb-editor__extra,
+.verbb-editor.is-collapsed .verbb-editor__foot { display: none; }
+
+/* Uploads tray */
+.verbb-editor__tray { display: flex; flex-wrap: wrap; gap: 8px; padding: 2px 14px 8px; }
+/*
+ * A chosen GIF stays a preview's size, whatever its own size. Its cap is in container units, not a
+ * percentage, so the frame shrinks to the image and Remove sits on the image's corner; the
+ * percentage line is the fallback. The ring above the image keeps white edges visible.
+ */
+.verbb-editor__gif { container-type: inline-size; display: flex; padding: 2px 14px 8px; }
+.verbb-editor__gif-frame { position: relative; max-width: 100%; border-radius: 8px; }
+.verbb-editor__gif-frame::before { content: ''; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px var(--_line); pointer-events: none; }
+.verbb-editor__gif-image { display: block; max-width: min(100%, 12rem); max-width: min(100cqi, 12rem); max-height: 12rem; width: auto; height: auto; border-radius: 8px; }
+.verbb-editor__thumb { position: relative; flex: none; width: 64px; height: 64px; overflow: hidden; border-radius: 8px; background: var(--_hover); box-shadow: inset 0 0 0 1px var(--_line); }
+.verbb-editor__thumb img { display: block; width: 100%; height: 100%; border-radius: inherit; object-fit: cover; }
+.verbb-editor__thumb-empty { display: grid; place-items: center; width: 100%; height: 100%; color: var(--_muted); }
+.verbb-editor__veil { position: absolute; inset: 0; display: grid; border-radius: inherit; place-items: center; background: color-mix(in srgb, var(--_overlay) 62%, transparent); color: var(--_overlay-fg); }
+.verbb-editor__veil--bad { background: color-mix(in srgb, var(--_danger) 78%, #000); }
+.verbb-editor__veil-button { display: grid; place-items: center; width: 30px; height: 30px; padding: 0; border: 0; border-radius: 50%; background: color-mix(in srgb, var(--_overlay-fg) 18%, transparent); color: var(--_overlay-fg); cursor: pointer; }
+.verbb-editor__ring { width: 30px; height: 30px; transform: rotate(-90deg); }
+.verbb-editor__ring circle, .verbb-editor__count circle { fill: none; stroke-width: 3; }
+.verbb-editor__veil .verbb-editor__ring-bg { stroke: color-mix(in srgb, var(--_overlay-fg) 30%, transparent); }
+.verbb-editor__veil .verbb-editor__ring-fg { stroke: var(--_overlay-fg); stroke-linecap: round; transition: stroke-dashoffset 0.15s; }
+.verbb-editor__alt-button { position: absolute; inset-inline-start: 4px; bottom: 4px; display: inline-flex; align-items: center; gap: 3px; height: 18px; padding: 0 5px; border: 0; border-radius: 4px; background: var(--_overlay); color: var(--_overlay-fg); font-family: var(--_font-family); font-size: 10px; font-weight: 700; line-height: 18px; letter-spacing: 0.04em; cursor: pointer; }
+.verbb-editor__alt-button .verbb-editor__icon { width: 10px; height: 10px; stroke-width: 3; }
+.verbb-editor__remove { position: absolute; top: 4px; inset-inline-end: 4px; display: grid; place-items: center; width: 20px; height: 20px; padding: 0; border: 0; border-radius: 50%; background: var(--_overlay); color: var(--_overlay-fg); cursor: pointer; opacity: 0; transition: opacity 0.12s; }
+.verbb-editor__remove .verbb-editor__icon { width: 12px; height: 12px; stroke-width: 2.4; }
+.verbb-editor__thumb:hover .verbb-editor__remove,
+.verbb-editor__gif-frame:hover .verbb-editor__remove,
+.verbb-editor__gif-frame:focus-within .verbb-editor__remove,
+.verbb-editor__thumb:focus-within .verbb-editor__remove,
+.verbb-editor__file:hover .verbb-editor__remove,
+.verbb-editor__file:focus-within .verbb-editor__remove { opacity: 1; }
+@media (hover: none) { .verbb-editor__remove { opacity: 1; } }
+
+/*
+ * On touch screens the small controls take a 44px press without looking any bigger. The thumbnail
+ * stops clipping so Remove's area can reach past its corner; Remove's reaches up and out and ALT's
+ * down, so the two never overlap. Cancel reply's is centred on it.
+ */
+@media (pointer: coarse) {
+    .verbb-editor__thumb { overflow: visible; }
+    .verbb-editor__reply .verbb-editor__tool::after,
+    .verbb-editor__remove::after,
+    .verbb-editor__alt-button::after { content: ''; position: absolute; width: 44px; height: 44px; }
+    .verbb-editor__reply .verbb-editor__tool::after { top: 50%; left: 50%; translate: -50% -50%; }
+    .verbb-editor__remove::after { top: -18px; inset-inline-end: -12px; }
+    .verbb-editor__alt-button::after { bottom: -14px; inset-inline-start: calc(50% - 22px); }
+}
+.verbb-editor__file { position: relative; display: flex; align-items: center; gap: 9px; min-width: 0; max-width: 240px; height: 64px; padding-block: 0; padding-inline: 10px 30px; border-radius: 8px; background: var(--_hover); box-shadow: inset 0 0 0 1px var(--_line); }
+.verbb-editor__file.is-failed { box-shadow: inset 0 0 0 1px var(--_danger); }
+.verbb-editor__file-icon { display: grid; place-items: center; flex: none; width: 34px; height: 40px; border-radius: 5px; background: var(--_pop-bg); color: var(--_accent); box-shadow: 0 0 0 1px var(--_line); }
+.verbb-editor__file-text { display: grid; gap: 3px; min-width: 0; font-size: 0.8125rem; }
+.verbb-editor__file-text b { overflow: hidden; font-weight: 600; white-space: nowrap; text-overflow: ellipsis; }
+.verbb-editor__file-text > span { color: var(--_muted); font-size: 0.75rem; white-space: nowrap; }
+.verbb-editor__file.is-failed .verbb-editor__file-text > span { color: var(--_danger); }
+.verbb-editor__bar { display: block; width: 120px; height: 4px; overflow: hidden; border-radius: 2px; background: var(--_line); }
+.verbb-editor__bar i { display: block; height: 100%; background: var(--_accent); transition: width 0.15s; }
+.verbb-editor__link-button { padding: 0 2px; border: 0; background: none; color: var(--_accent); font: inherit; font-weight: 600; text-decoration: underline; cursor: pointer; }
+
+/* Notice line */
+.verbb-editor__notice { display: flex; align-items: center; gap: 8px; margin: 0 10px 8px; padding: 7px 10px; border-radius: 7px; background: var(--_soft); font-size: 0.8125rem; }
+.verbb-editor__notice:empty { display: none; }
+.verbb-editor__notice .verbb-editor__icon { width: 16px; height: 16px; }
+.verbb-editor__notice-text { flex: 1; min-width: 0; }
+.verbb-editor__notice.is-bad { background: color-mix(in srgb, var(--_danger) 12%, var(--_pop-bg)); }
+.verbb-editor__notice.is-bad > .verbb-editor__icon { color: var(--_danger); }
+.verbb-editor__notice.is-warn > .verbb-editor__icon { color: var(--_warning); }
+.verbb-editor__notice-close { display: grid; place-items: center; width: 24px; height: 24px; padding: 0; border: 0; border-radius: 5px; background: transparent; color: var(--_muted); cursor: pointer; }
+.verbb-editor__notice-close .verbb-editor__icon { width: 14px; height: 14px; }
+
+/* Footer slot: a host's own fields and attachments that go with the post, after the text */
+.verbb-editor__extra { padding: 0 12px 8px; min-width: 0; }
+
+/* Above slot: a host's own fields that come before the text, such as a rating. The header, these,
+   the text's box and the footer slot share one 12px inset, so their edges line up. */
+.verbb-editor__above { padding: 10px 12px 0; min-width: 0; }
+
+/*
+ * The toolbar's own row: above the text, or below it once a host's fields sit between the text and
+ * Post. With fields in the frame, the text and its toolbar are outlined as one box, so the toolbar
+ * reads as the text's rather than the whole form's.
+ */
+.verbb-editor__tools { display: flex; align-items: center; min-width: 0; padding: 4px 6px; }
+.verbb-editor--toolbar-top .verbb-editor__tools { border-bottom: 1px solid var(--_line); }
+/* Only while open: a collapsed editor is one line, with no box or fields around the text. */
+.verbb-editor.has-fields:not(.is-collapsed) .verbb-editor__box { margin: 10px 12px; border: 1px solid var(--_border); border-radius: calc(var(--_radius) - 2px); transition: border-color 0.15s, box-shadow 0.15s; }
+/* With fields around the text, the ring is on what has focus, the text's box or a field, not the whole frame. */
+.verbb-editor.has-fields:not(.is-collapsed):focus-within { border-color: var(--_border); box-shadow: none; }
+.verbb-editor.has-fields:not(.is-collapsed) .verbb-editor__box:focus-within { border-color: color-mix(in srgb, var(--_accent) 70%, var(--_border)); box-shadow: 0 0 0 3px var(--_ring); }
+.verbb-editor.has-fields:not(.is-collapsed) .verbb-editor__head + .verbb-editor__box,
+.verbb-editor.has-fields:not(.is-collapsed) .verbb-editor__above + .verbb-editor__box { margin-top: 8px; }
+.verbb-editor.has-fields:not(.is-collapsed) .verbb-editor__extra { padding-top: 2px; }
+.verbb-editor.is-collapsed .verbb-editor__above,
+.verbb-editor.is-collapsed .verbb-editor__tools { display: none; }
+
+/* Footer */
+/* The status and actions wrap below the tools rather than squeezing them out of sight on a very narrow editor. */
+.verbb-editor__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; min-width: 0; padding: 6px 8px 8px; }
+.verbb-editor__toolbar { display: flex; flex: 1 1 0; align-items: center; gap: 1px; min-width: min(100%, 72px); }
+.verbb-editor__separator { flex: none; width: 1px; height: 18px; margin: 0 4px; background: color-mix(in srgb, var(--_fg) 14%, transparent); }
+.verbb-editor__tool { position: relative; display: grid; place-items: center; flex: none; width: 32px; height: 32px; padding: 0; border: 0; border-radius: 7px; background: transparent; color: color-mix(in srgb, var(--_fg) 72%, transparent); cursor: pointer; }
+.verbb-editor__tool:hover { background: var(--_hover); color: var(--_fg); }
+.verbb-editor__tool[aria-pressed='true'] { background: var(--_soft); color: var(--_accent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--_accent) 30%, transparent); }
+.verbb-editor__tool[aria-expanded='true'] { background: var(--_hover); color: var(--_fg); }
+.verbb-editor__tool:disabled { opacity: 0.35; cursor: default; }
+.verbb-editor__meta { display: flex; flex: none; align-items: center; gap: 8px; min-width: 0; margin-inline-start: auto; padding-inline-start: 6px; color: var(--_muted); font-size: 0.8125rem; }
+.verbb-editor__status { display: inline-flex; align-items: center; gap: 5px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.verbb-editor__status .verbb-editor__icon { transition: opacity 0.3s; }
+.verbb-editor__status .verbb-editor__icon { width: 14px; height: 14px; }
+.verbb-editor__status.is-bad { color: var(--_danger); font-weight: 600; }
+/* Only the check mark fades, so the words keep their contrast. */
+.verbb-editor__status.is-faded .verbb-editor__icon { opacity: 0.4; }
+.verbb-editor__count { display: inline-flex; flex: none; align-items: center; gap: 4px; font-size: 0.75rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.verbb-editor__count svg { width: 20px; height: 20px; transform: rotate(-90deg); }
+.verbb-editor__count .verbb-editor__ring-bg { stroke: color-mix(in srgb, var(--_fg) 14%, transparent); stroke-width: 2.6; }
+.verbb-editor__count .verbb-editor__ring-fg { stroke: var(--_accent); stroke-width: 2.6; stroke-linecap: round; }
+.verbb-editor__count.is-warn { color: var(--_warning); }
+.verbb-editor__count.is-warn .verbb-editor__ring-fg { stroke: var(--_warning); }
+.verbb-editor__count.is-bad { color: var(--_danger); }
+.verbb-editor__count.is-bad .verbb-editor__ring-fg { stroke: var(--_danger); }
+.verbb-editor__actions { display: flex; flex: none; align-items: center; gap: 6px; }
+.verbb-editor__meta:empty + .verbb-editor__actions:empty { display: none; }
+.verbb-editor__toolbar + .verbb-editor__meta:empty { margin-inline-start: auto; }
+
+/* Buttons */
+.verbb-editor__button,
+.verbb-editor__submit { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 14px; border: 0; border-radius: calc(var(--_radius) * 0.7); background: transparent; color: var(--_fg); font-family: var(--_font-family); font-size: 0.875rem; font-weight: 600; white-space: nowrap; cursor: pointer; }
+.verbb-editor__button:hover { background: var(--_hover); }
+.verbb-editor__button .verbb-editor__icon { width: 16px; height: 16px; }
+.verbb-editor__button--primary,
+.verbb-editor__submit { background: var(--_accent); color: var(--_accent-fg); }
+.verbb-editor__button--primary:hover,
+.verbb-editor__submit:hover { background: color-mix(in srgb, var(--_accent) 88%, #000); }
+.verbb-editor__button--danger { color: var(--_danger); }
+.verbb-editor__submit[aria-disabled='true'] { opacity: 0.45; cursor: not-allowed; }
+.verbb-editor__submit[aria-disabled='true']:hover { background: var(--_accent); }
+/* Key symbols use the UI font: monospace fonts lack ↵ and ⇧, so they fall back at odd sizes and baselines. */
+.verbb-editor__submit kbd { display: inline-flex; align-items: center; font-family: var(--_font-family); font-size: 12px; font-weight: 500; line-height: 1; letter-spacing: 0.06em; opacity: 0.7; }
+.verbb-editor__submit > .verbb-editor__icon { display: none; width: 18px; height: 18px; stroke-width: 2.2; }
+.verbb-editor__spinner { width: 14px; height: 14px; border: 2px solid currentColor; border-inline-end-color: transparent; border-radius: 50%; animation: verbb-editor-spin 0.7s linear infinite; }
+@keyframes verbb-editor-spin { to { transform: rotate(360deg); } }
+
+/* Drop target: the whole editor */
+.verbb-editor__drop { position: absolute; inset: -1px; z-index: 5; display: none; place-items: center; border: 2px dashed var(--_accent); border-radius: inherit; background: color-mix(in srgb, var(--_accent) 9%, color-mix(in srgb, var(--_pop-bg) 92%, transparent)); color: var(--_accent); font-size: 0.875rem; font-weight: 650; pointer-events: none; }
+.verbb-editor__drop span { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 20px; background: var(--_pop-bg); box-shadow: 0 4px 18px -6px rgb(0 0 0 / 0.25); }
+.verbb-editor.is-dropping .verbb-editor__drop { display: grid; }
+
+/* Popovers: link, More, help, alt text and suggestions */
+.verbb-editor__pop { position: absolute; z-index: 30; width: 320px; max-width: calc(100% - 8px); overflow: hidden; border-radius: 10px; background: var(--_pop-bg); color: var(--_fg); box-shadow: 0 0 0 1px var(--_line), 0 14px 36px -10px rgb(10 15 25 / 0.35); font-size: 0.84375rem; animation: verbb-editor-pop 0.12s ease-out; }
+@keyframes verbb-editor-pop { from { opacity: 0; transform: translateY(4px); } }
+@media (prefers-reduced-motion: reduce) { .verbb-editor__pop, .verbb-editor__bubble { animation: none; } }
+.verbb-editor__pop--sm { width: 268px; }
+.verbb-editor__pop--menu { width: 240px; }
+
+/* GIF search: GIPHY's results as a scrolling grid, with the "Powered by GIPHY" its terms ask for. */
+.verbb-editor__pop--gifs { width: 340px; }
+.verbb-editor__gifs { display: grid; gap: 8px; padding: 8px; }
+.verbb-editor__gifs-search { width: 100%; min-width: 0; height: 34px; padding: 0 10px; border: 1px solid var(--_border); border-radius: 7px; background: var(--_bg); color: var(--_fg); font: inherit; font-size: 0.875rem; }
+.verbb-editor__gifs-search:focus-visible { outline: none; border-color: var(--_accent); box-shadow: 0 0 0 3px var(--_ring); }
+/* A fixed height, so the popover is its full size when it's placed, before any results arrive. */
+.verbb-editor__gifs-results { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: 76px; align-content: start; gap: 4px; height: 240px; overflow-y: auto; overscroll-behavior: contain; }
+.verbb-editor__gifs-result { display: block; width: 100%; padding: 0; border: 0; border-radius: 6px; overflow: hidden; background: var(--_hover); cursor: pointer; }
+.verbb-editor__gifs-image { display: block; width: 100%; height: 76px; object-fit: cover; }
+.verbb-editor__gifs-result:hover .verbb-editor__gifs-image { opacity: 0.85; }
+.verbb-editor__gifs-status { margin: 0; color: var(--_muted); }
+.verbb-editor__gifs-status:empty { display: none; }
+.verbb-editor__gifs-attribution { margin: 0; font-size: 0.75rem; font-weight: 700; text-align: end; }
+.verbb-editor__pop-field { display: flex; align-items: center; gap: 8px; height: 42px; padding: 0 10px; border-bottom: 1px solid var(--_line); color: var(--_muted); }
+.verbb-editor__pop-field .verbb-editor__icon { width: 16px; height: 16px; }
+.verbb-editor__pop-field input { flex: 1; min-width: 0; height: 40px; border: 0; background: transparent; color: var(--_fg); font: inherit; font-size: 0.875rem; }
+.verbb-editor__pop-field input[aria-invalid='true'] { color: var(--_danger); }
+.verbb-editor__pop-group { display: block; padding: 8px 12px 3px; color: var(--_muted); font-size: 0.6875rem; font-weight: 650; letter-spacing: 0.05em; text-transform: uppercase; }
+.verbb-editor__pop-list,
+.verbb-editor__suggestions [role='listbox'] { max-height: 260px; margin: 0; padding: 4px; overflow-y: auto; }
+.verbb-editor__pop-list:empty,
+.verbb-editor__suggestions [role='listbox']:empty { display: none; }
+.verbb-editor__pop-message,
+.verbb-editor__suggestions-status:has(b) { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; color: var(--_muted); }
+.verbb-editor__pop-message .verbb-editor__icon,
+.verbb-editor__suggestions-status .verbb-editor__icon { width: 16px; height: 16px; margin-top: 2px; }
+.verbb-editor__pop-message b,
+.verbb-editor__suggestions-status b { display: block; color: var(--_fg); font-weight: 600; }
+.verbb-editor__pop-message.is-failed .verbb-editor__icon,
+.verbb-editor__suggestions-status.is-failed .verbb-editor__icon { color: var(--_danger); }
+.verbb-editor__suggestions-status:not(:has(b)):not(:has(.verbb-editor__pop-group)) { padding: 10px 12px; color: var(--_muted); }
+.verbb-editor__suggestions-status:empty { display: none; }
+.verbb-editor__pop-foot { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-top: 1px solid var(--_line); color: var(--_muted); font-size: 0.75rem; }
+.verbb-editor__pop-foot > span:last-child { white-space: nowrap; }
+.verbb-editor__pop-foot .verbb-editor__button { height: 28px; padding: 0 10px; font-size: 0.8125rem; }
+.verbb-editor__grow { margin-inline-end: auto; }
+.verbb-editor__option,
+.verbb-editor__suggestion { display: flex; align-items: center; gap: 10px; width: 100%; min-width: 0; padding: 7px 8px; border: 0; border-radius: 7px; background: transparent; color: inherit; font: inherit; text-align: start; cursor: pointer; }
+.verbb-editor__option[aria-selected='true'],
+.verbb-editor__suggestion[aria-selected='true'],
+.verbb-editor__option:focus-visible { background: var(--_soft); outline: none; }
+.verbb-editor__option:hover,
+.verbb-editor__suggestion:hover { background: var(--_hover); }
+.verbb-editor__option[aria-disabled='true'] { opacity: 0.45; cursor: default; }
+.verbb-editor__option-icon { display: grid; place-items: center; flex: none; width: 28px; height: 28px; border-radius: 7px; background: var(--_hover); color: var(--_muted); }
+.verbb-editor__option-icon .verbb-editor__icon { width: 15px; height: 15px; }
+.verbb-editor__option-text { display: grid; flex: 1; min-width: 0; }
+.verbb-editor__option-text b { overflow: hidden; font-weight: 550; white-space: nowrap; text-overflow: ellipsis; }
+.verbb-editor__option-text span { overflow: hidden; color: var(--_muted); font-size: 0.75rem; white-space: nowrap; text-overflow: ellipsis; }
+.verbb-editor__option kbd { color: var(--_muted); font-family: var(--_font-family); font-size: 12px; letter-spacing: 0.06em; }
+.verbb-editor__avatar { display: grid; place-items: center; flex: none; width: 26px; height: 26px; overflow: hidden; border-radius: 50%; background: var(--_avatar-1); color: var(--_avatar-fg); font-size: 10.5px; font-weight: 700; }
+.verbb-editor__avatar[data-colour='2'] { background: var(--_avatar-2); }
+.verbb-editor__avatar[data-colour='3'] { background: var(--_avatar-3); }
+.verbb-editor__avatar[data-colour='4'] { background: var(--_avatar-4); }
+.verbb-editor__avatar[data-colour='5'] { background: var(--_avatar-5); }
+.verbb-editor__avatar[data-colour='6'] { background: var(--_avatar-6); }
+.verbb-editor__avatar[data-colour='7'] { background: var(--_avatar-7); }
+.verbb-editor__avatar[data-colour='8'] { background: var(--_avatar-8); }
+.verbb-editor__avatar img { width: 100%; height: 100%; object-fit: cover; }
+.verbb-editor__menu { padding: 4px; }
+.verbb-editor__menu .verbb-editor__option { padding: 6px 8px; }
+.verbb-editor__menu .verbb-editor__icon { width: 16px; height: 16px; color: var(--_muted); }
+.verbb-editor__menu [aria-checked='true'] .verbb-editor__icon { color: var(--_accent); }
+.verbb-editor__menu hr { margin: 4px 2px; border: 0; border-top: 1px solid var(--_line); }
+.verbb-editor__alt { display: grid; gap: 8px; padding: 12px; }
+.verbb-editor__alt img { width: 100%; height: 110px; border-radius: 6px; object-fit: cover; }
+.verbb-editor__alt textarea { width: 100%; height: 64px; padding: 8px 10px; border: 1px solid var(--_border); border-radius: 7px; background: var(--_pop-bg); color: var(--_fg); font: inherit; resize: none; }
+.verbb-editor__alt textarea:focus { border-color: var(--_accent); box-shadow: 0 0 0 3px var(--_ring); }
+.verbb-editor__alt p { margin: 0; color: var(--_muted); font-size: 0.75rem; }
+.verbb-editor__help { width: 300px; max-width: 100%; padding: 12px 14px; outline: none; }
+.verbb-editor__help caption { padding: 0 0 4px; color: var(--_muted); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; text-align: start; text-transform: uppercase; }
+.verbb-editor__help table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
+.verbb-editor__help table + table { margin-top: 10px; }
+.verbb-editor__help td { padding: 4px 0; }
+.verbb-editor__help td:last-child { color: var(--_muted); font: 12px var(--_code-font); text-align: end; }
+.verbb-editor__link-card { display: flex; align-items: center; gap: 4px; width: auto; max-width: min(380px, calc(100% - 8px)); padding: 5px; padding-inline-start: 10px; }
+.verbb-editor__link-card a { display: inline-flex; align-items: center; gap: 6px; max-width: 220px; overflow: hidden; color: var(--_accent); font-size: 0.8125rem; text-decoration: none; white-space: nowrap; text-overflow: ellipsis; }
+.verbb-editor__link-card a .verbb-editor__icon { width: 14px; height: 14px; }
+.verbb-editor__link-card .verbb-editor__tool { width: 28px; height: 28px; }
+.verbb-editor__link-card .verbb-editor__tool .verbb-editor__icon { width: 15px; height: 15px; }
+
+/* Right to left: shortcuts and key names still read left to right, and icons that point along the line flip. */
+.verbb-editor kbd,
+.verbb-editor__help td:last-child { direction: ltr; unicode-bidi: isolate; }
+/* By attribute rather than `:dir()`, which the build lowers to a guess from the page language. */
+[dir='rtl'] .verbb-editor__icon--mirror { transform: scaleX(-1); }
+[dir='rtl'] [dir='ltr'] .verbb-editor__icon--mirror { transform: none; }
+
+/* Selection bubble */
+.verbb-editor__bubble { position: absolute; z-index: 31; display: flex; align-items: center; gap: 1px; padding: 3px; border-radius: 9px; background: var(--_bubble); box-shadow: 0 10px 28px -8px rgb(0 0 0 / 0.45); animation: verbb-editor-pop 0.1s ease-out; }
+.verbb-editor__bubble .verbb-editor__tool { width: 30px; height: 30px; color: color-mix(in srgb, var(--_bubble-fg) 82%, transparent); }
+.verbb-editor__bubble .verbb-editor__tool:hover { background: color-mix(in srgb, var(--_bubble-fg) 12%, transparent); color: var(--_bubble-fg); }
+.verbb-editor__bubble .verbb-editor__tool[aria-pressed='true'] { background: color-mix(in srgb, var(--_bubble-fg) 20%, transparent); color: var(--_bubble-fg); box-shadow: none; }
+.verbb-editor__bubble .verbb-editor__separator { background: color-mix(in srgb, var(--_bubble-fg) 20%, transparent); }
+.verbb-editor__bubble::after { content: ''; position: absolute; bottom: -5px; left: var(--verbb-editor-arrow, 50%); width: 10px; height: 10px; margin-left: -5px; border-radius: 2px; background: var(--_bubble); transform: rotate(45deg); }
+.verbb-editor__bubble.is-below::after { top: -5px; bottom: auto; }
+
+/* Tooltip */
+.verbb-editor__tip { position: absolute; z-index: 40; display: flex; align-items: center; gap: 8px; padding: 5px 8px; border-radius: 6px; background: var(--_bubble); color: var(--_bubble-fg); font-family: var(--_font-family); font-size: 12px; font-weight: 500; line-height: 1.3; white-space: nowrap; box-shadow: 0 6px 18px -6px rgb(0 0 0 / 0.4); }
+.verbb-editor__tip kbd { color: color-mix(in srgb, var(--_bubble-fg) 68%, transparent); font-family: var(--_font-family); font-size: 12px; font-weight: 500; letter-spacing: 0.06em; }
+
+/* Narrow editors: tools scroll in one row, and at phone width the send button becomes an arrow */
+@container verbb-editor (max-width: 520px) {
+    /* Focused tools scroll clear of the fade that shows there's more to scroll to. */
+    .verbb-editor__toolbar { overflow-x: auto; scrollbar-width: none; scroll-padding-inline: 24px; }
+    .verbb-editor__toolbar.is-clipped-left { mask-image: linear-gradient(to right, transparent, #000 24px); }
+    .verbb-editor__toolbar.is-clipped-right { mask-image: linear-gradient(to left, transparent, #000 24px); }
+    .verbb-editor__toolbar.is-clipped-left.is-clipped-right { mask-image: linear-gradient(to right, transparent, #000 24px, #000 calc(100% - 24px), transparent); }
+    .verbb-editor__toolbar::-webkit-scrollbar { display: none; }
+    .verbb-editor__status-text,
+    .verbb-editor__submit kbd { display: none; }
+    .verbb-editor__meta { gap: 4px; padding-inline-start: 2px; }
+    .verbb-editor__pop:not(.verbb-editor__link-card) { left: 4px !important; width: calc(100% - 8px); }
+}
+
+@container verbb-editor (max-width: 400px) {
+    .verbb-editor__submit { width: 36px; padding: 0; border-radius: 50%; }
+    .verbb-editor__submit-label { display: none; }
+    .verbb-editor__submit > .verbb-editor__icon { display: block; }
+}
+
+/*
+ * Windows High Contrast and other forced colours drop backgrounds and shadows, which carry the focus
+ * ring, popover edges, pressed tools and the chosen suggestion. System colours draw them instead.
+ */
+@media (forced-colors: active) {
+    .verbb-editor:focus-within { outline: 2px solid Highlight; outline-offset: 1px; }
+    .verbb-editor__pop,
+    .verbb-editor__bubble,
+    .verbb-editor__tip,
+    .verbb-editor__reply,
+    .verbb-editor__notice,
+    .verbb-editor__file { border: 1px solid CanvasText; }
+    .verbb-editor__button,
+    .verbb-editor__submit { border: 1px solid ButtonText; }
+    .verbb-editor__tool[aria-pressed='true'] { forced-color-adjust: none; background: SelectedItem; color: SelectedItemText; }
+    .verbb-editor__option[aria-selected='true'],
+    .verbb-editor__suggestion[aria-selected='true'],
+    .verbb-editor__option:focus-visible { outline: 2px solid Highlight; outline-offset: -2px; }
+    .verbb-editor__tool:disabled,
+    .verbb-editor__option[aria-disabled='true'],
+    .verbb-editor__submit[aria-disabled='true'] { opacity: 1; color: GrayText; border-color: GrayText; }
+}
+
+/* Read-only and busy */
+.verbb-editor.is-busy .verbb-editor__body { opacity: 0.7; }
+
+/* Tiptap's required rules, which it would otherwise inject and a strict `style-src` would block. */
+.ProseMirror { position: relative; word-wrap: break-word; white-space: pre-wrap; white-space: break-spaces; font-variant-ligatures: none; font-feature-settings: 'liga' 0; }
+.ProseMirror [contenteditable='false'] { white-space: normal; }
+.ProseMirror [contenteditable='false'] [contenteditable='true'] { white-space: pre-wrap; }
+.ProseMirror pre { white-space: pre-wrap; }
+img.ProseMirror-separator { display: inline !important; border: none !important; margin: 0 !important; width: 0 !important; height: 0 !important; }
+.ProseMirror-gapcursor { display: none; pointer-events: none; position: absolute; margin: 0; }
+.ProseMirror-gapcursor::after { content: ''; display: block; position: absolute; top: -2px; width: 20px; border-top: 1px solid currentColor; animation: ProseMirror-cursor-blink 1.1s steps(2, start) infinite; }
+@keyframes ProseMirror-cursor-blink { to { visibility: hidden; } }
+.ProseMirror-hideselection *::selection { background: transparent; }
+.ProseMirror-hideselection * { caret-color: transparent; }
+.ProseMirror-focused .ProseMirror-gapcursor { display: block; }

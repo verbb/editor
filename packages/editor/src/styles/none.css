@@ -1,0 +1,40 @@
+/* Keep layout and interaction rules while leaving appearance to the host site. */
+.verbb-editor[data-theme='none'] {
+    --_bg: var(--verbb-editor-bg, transparent);
+    --_fg: var(--verbb-editor-fg, inherit);
+    --_muted: var(--verbb-editor-muted, inherit);
+    --_border: var(--verbb-editor-border, transparent);
+    --_hover: var(--verbb-editor-hover, transparent);
+    --_accent: var(--verbb-editor-accent, currentColor);
+    --_accent-fg: var(--verbb-editor-accent-fg, Canvas);
+    --_pop-bg: var(--verbb-editor-pop-bg, Canvas);
+    --_min-height: var(--verbb-editor-min-height, 0);
+    font: inherit;
+    padding: 0;
+}
+
+.verbb-editor[data-theme='none']:focus-within { box-shadow: none; }
+.verbb-editor[data-theme='none'] .verbb-editor__tool,
+.verbb-editor[data-theme='none'] .verbb-editor__button,
+.verbb-editor[data-theme='none'] .verbb-editor__submit { border: revert; background: revert; color: inherit; }
+.verbb-editor[data-theme='none'] .ProseMirror { outline: revert; }
+
+/* A floating menu needs its own surface, or the writing area shows through it. */
+.verbb-editor[data-theme='none'] .verbb-editor__pop {
+    background: Canvas;
+    color: CanvasText;
+    border: 1px solid currentColor;
+}
+
+.verbb-editor[data-theme='none'] .ProseMirror blockquote,
+.verbb-editor[data-theme='none'] .ProseMirror code,
+.verbb-editor[data-theme='none'] .ProseMirror a,
+.verbb-editor[data-theme='none'] .verbb-editor-mention {
+    color: inherit;
+    background: revert;
+    border: revert;
+    border-radius: revert;
+    padding: revert;
+    margin: revert;
+    font: inherit;
+}

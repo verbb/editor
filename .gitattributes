@@ -1,0 +1,14 @@
+# Keep development files out of Composer archives. The built bundle under src/ is what consumers use.
+/.github export-ignore
+/apps export-ignore
+/docs export-ignore
+/packages export-ignore
+/scripts export-ignore
+/tests export-ignore
+/.env.testing.example export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore
+/package.json export-ignore
+/package-lock.json export-ignore
+/phpunit.craft.xml export-ignore
+/phpunit.xml.dist export-ignore

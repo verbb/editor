@@ -1,0 +1,74 @@
+name: Checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: current
+            php: '8.3'
+            craft: ''
+          - name: minimum
+            php: '8.2'
+            craft: '5.10.0'
+    name: ${{ matrix.name }} (PHP ${{ matrix.php }})
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: editor-tests
+          MYSQL_DATABASE: editor_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -peditor-tests"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+    env:
+      ENVIRONMENT: testing
+      CRAFT_ENVIRONMENT: testing
+      CRAFT_DB_DRIVER: mysql
+      CRAFT_DB_SERVER: 127.0.0.1
+      CRAFT_DB_PORT: 3306
+      CRAFT_DB_DATABASE: editor_test
+      CRAFT_DB_USER: root
+      CRAFT_DB_PASSWORD: editor-tests
+      CRAFT_SECURITY_KEY: disposable-editor-ci-security-key
+      CRAFT_APP_ID: EditorCiTests
+      PRIMARY_SITE_URL: http://localhost
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: bcmath, curl, dom, gd, intl, mbstring, pdo_mysql, zip
+          coverage: none
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Pin the minimum Craft version
+        if: matrix.craft != ''
+        # The floor itself has advisories fixed in later releases, which only this test run tolerates.
+        run: |
+          composer config audit.block-insecure false
+          composer require --no-update --no-interaction "craftcms/cms:${{ matrix.craft }}"
+      - run: composer update --no-interaction --prefer-dist
+      - run: npm ci
+      # Runs the type check, browser and PHP unit tests, both builds, the cross-layer contract and the bundle freshness check.
+      - run: npm run check
+      - name: Install isolated Craft test application
+        run: |
+          : > .env.testing
+          composer test:setup
+      - run: composer test
+      - run: npx playwright install --with-deps chromium-headless-shell
+      - name: Real-browser tests, including the end-to-end path through Craft
+        run: npm run test:browser
+        env:
+          EDITOR_E2E: '1'

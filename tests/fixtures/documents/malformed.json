@@ -1,0 +1,29 @@
+[
+    {
+        "type": "paragraph",
+        "content": [
+            { "type": "text", "text": "Valid" }
+        ]
+    },
+    {
+        "type": "heading",
+        "attrs": { "level": 1 },
+        "content": [
+            { "type": "text", "text": "Unsupported heading" }
+        ]
+    },
+    null,
+    {
+        "not-a-node": true
+    },
+    {
+        "type": "paragraph",
+        "content": [
+            {
+                "type": "text",
+                "marks": [{ "type": "highlight" }],
+                "text": "Unknown mark"
+            }
+        ]
+    }
+]

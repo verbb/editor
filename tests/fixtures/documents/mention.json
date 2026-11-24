@@ -1,0 +1,17 @@
+[
+    {
+        "type": "paragraph",
+        "content": [
+            { "type": "text", "text": "Hello " },
+            {
+                "type": "mention",
+                "attrs": {
+                    "id": 1,
+                    "type": "craft\\elements\\User",
+                    "label": "Ash"
+                }
+            },
+            { "type": "text", "text": " welcome back." }
+        ]
+    }
+]

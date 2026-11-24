@@ -1,0 +1,106 @@
+{
+    "name": "@verbb/editor",
+    "version": "1.0.0-dev",
+    "description": "Rich-text editing for Craft CMS front ends, paired with the verbb/editor Composer library.",
+    "keywords": [
+        "craftcms",
+        "rich-text",
+        "editor",
+        "tiptap",
+        "web-components"
+    ],
+    "homepage": "https://docs.verbb.io/editor/",
+    "bugs": {
+        "url": "https://github.com/verbb/editor/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/verbb/editor.git",
+        "directory": "packages/editor"
+    },
+    "license": "MIT",
+    "author": "Verbb",
+    "type": "module",
+    "types": "./dist/index.d.ts",
+    "files": [
+        "dist",
+        "README.md",
+        "LICENSE.md"
+    ],
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "default": "./dist/index.js"
+        },
+        "./gifs": {
+            "types": "./dist/gifs/index.d.ts",
+            "import": "./dist/gifs.js",
+            "default": "./dist/gifs.js"
+        },
+        "./styles": {
+            "types": "./dist/styles.d.ts",
+            "default": "./dist/index.css"
+        },
+        "./themes/light": {
+            "types": "./dist/styles.d.ts",
+            "default": "./dist/themes/light.css"
+        },
+        "./themes/dark": {
+            "types": "./dist/styles.d.ts",
+            "default": "./dist/themes/dark.css"
+        },
+        "./themes/craft": {
+            "types": "./dist/styles.d.ts",
+            "default": "./dist/themes/craft.css"
+        },
+        "./themes/none": {
+            "types": "./dist/styles.d.ts",
+            "default": "./dist/themes/none.css"
+        },
+        "./package.json": "./package.json"
+    },
+    "sideEffects": [
+        "*.css"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "typecheck": "tsc --noEmit --incremental false -p tsconfig.json",
+        "build": "vite build",
+        "dev": "vite build --watch",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "build:bundle": "vite build --config vite.bundle.config.ts",
+        "prepack": "npm run build",
+        "prepublishOnly": "node ../../scripts/release-version.mjs --publishable"
+    },
+    "dependencies": {
+        "@tiptap/core": "^3.35.0",
+        "@tiptap/extension-blockquote": "^3.35.0",
+        "@tiptap/extension-bold": "^3.35.0",
+        "@tiptap/extension-code": "^3.35.0",
+        "@tiptap/extension-document": "^3.35.0",
+        "@tiptap/extension-hard-break": "^3.35.0",
+        "@tiptap/extension-heading": "^3.35.0",
+        "@tiptap/extension-italic": "^3.35.0",
+        "@tiptap/extension-link": "^3.35.0",
+        "@tiptap/extension-list": "^3.35.0",
+        "@tiptap/extension-mention": "^3.35.0",
+        "@tiptap/extension-paragraph": "^3.35.0",
+        "@tiptap/extension-strike": "^3.35.0",
+        "@tiptap/extension-text": "^3.35.0",
+        "@tiptap/extensions": "^3.35.0",
+        "@tiptap/pm": "^3.35.0",
+        "@tiptap/suggestion": "^3.35.0"
+    },
+    "devDependencies": {
+        "@typescript/typescript6": "^6.0.2",
+        "jsdom": "^31.0.1",
+        "typescript": "^7.0.2",
+        "vite": "^8.3.8",
+        "vite-plugin-dts": "^5.1.2",
+        "vitest": "^5.1.1"
+    }
+}

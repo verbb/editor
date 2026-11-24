@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Verbb Editor Playground</title>
+        <style>
+            body {
+                font-family: ui-sans-serif, system-ui, sans-serif;
+                margin: 2rem auto;
+                max-width: 48rem;
+                padding: 0 1rem;
+            }
+
+            .grid {
+                display: grid;
+                gap: 1.5rem;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Verbb Editor Playground</h1>
+        <p>Resource controls require an authenticated Craft context. Without one, you can inspect their error states.</p>
+        <div class="grid">
+            <section>
+                <h2>Light</h2>
+                <div id="editor-light"></div>
+            </section>
+            <section>
+                <h2>Dark</h2>
+                <div id="editor-dark"></div>
+            </section>
+            <section><h2>Host styling</h2><div id="editor-none"></div></section>
+            <section><h2>Editor element</h2>
+                <form id="example-form">
+                    <verbb-editor name="body" required placeholder="Required message" submit-label="Post" limit="280" draft-key="playground">
+                        <span slot="header">Replying to <b>Alex</b></span>
+                        <button slot="actions" type="reset" class="verbb-editor__button">Reset</button>
+                    </verbb-editor>
+                </form>
+                <output id="form-result"></output>
+            </section>
+            <section><h2>Editor input</h2><verbb-editor-input placeholder="For a frame of your own"></verbb-editor-input></section>
+        </div>
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>
