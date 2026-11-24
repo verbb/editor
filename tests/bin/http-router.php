@@ -115,7 +115,7 @@ if ($uriPath === '/__e2e') {
     header('Content-Type: text/html');
     echo '<!doctype html><link rel="stylesheet" href="/__dist/editor.css"><div id="editor"></div><script type="module">'
         . 'import { Editor } from "/__dist/editor.js";'
-        . 'window.editor = new Editor("#editor", ' . json_encode($options) . ');'
+        . 'window.editor = await Editor.create("#editor", ' . json_encode($options) . ');'
         . 'window.editorReady = true;'
         . '</script>';
 
