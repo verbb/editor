@@ -1478,7 +1478,8 @@ test.describe('accessibility, touch and right to left', () => {
             { name: 'notes.txt', mimeType: 'text/plain', buffer: Buffer.from('notes') },
             { name: 'plan.txt', mimeType: 'text/plain', buffer: Buffer.from('plan') },
         ]);
-        await expect(page.locator('.verbb-editor > .verbb-editor__sr[role="status"]')).toHaveText('notes.txt uploaded. plan.txt uploaded.');
+        // Each is announced as it finishes, so the two requests decide the order.
+        await expect(page.locator('.verbb-editor > .verbb-editor__sr[role="status"]')).toHaveText(/^(notes\.txt uploaded\. plan\.txt uploaded\.|plan\.txt uploaded\. notes\.txt uploaded\.)$/);
     });
 
     test('on a touch screen, Cancel reply, Remove and ALT take a 44px press without growing, and never overlap', async ({ browser }) => {

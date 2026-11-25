@@ -16,8 +16,9 @@ use verbb\editor\base\MentionProviderInterface;
 $uriPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $distPath = dirname(__DIR__, 2) . '/src/web/assets/editor/dist/';
 
-if (preg_match('#^/__dist/(editor\.(?:js|css))$#', $uriPath, $match)) {
-    header('Content-Type: ' . ($match[1] === 'editor.js' ? 'text/javascript' : 'text/css'));
+// The editor and the chunks it loads on demand, which sit beside it in the bundle folder.
+if (preg_match('#^/__dist/([A-Za-z0-9_-]+(?:\.[A-Za-z0-9_-]+)*\.(js|css))$#', $uriPath, $match) && is_file($distPath . $match[1])) {
+    header('Content-Type: ' . ($match[2] === 'js' ? 'text/javascript' : 'text/css'));
     readfile($distPath . $match[1]);
 
     return;
