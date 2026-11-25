@@ -2,7 +2,7 @@
     "name": "verbb/editor",
     "description": "A Craft-native frontend rich-text editor foundation.",
     "type": "library",
-    "version": "1.0.0-dev",
+    "version": "1.0.0",
     "support": {
         "email": "support@verbb.io",
         "issues": "https://github.com/verbb/editor/issues?state=open",

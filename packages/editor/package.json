@@ -1,6 +1,6 @@
 {
     "name": "@verbb/editor",
-    "version": "1.0.0-dev",
+    "version": "1.0.0",
     "description": "Rich-text editing for Craft CMS front ends, paired with the verbb/editor Composer library.",
     "keywords": [
         "craftcms",
